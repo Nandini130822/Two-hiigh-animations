@@ -1,0 +1,111 @@
+/* ==========================================================================
+   TOO HIGH — scroll "jacket zip" hero
+   No dependencies. Works on any site (plain HTML, WordPress, Webflow, React…)
+   ========================================================================== */
+
+.th-scroll {
+  /* ---- Tweak these ---- */
+  --th-length: 400vh;          /* how much scrolling the animation lasts */
+  --th-bg: #000;               /* colour the video fades to */
+  --th-font: "Archivo Black", "Helvetica Neue", Arial, sans-serif;
+
+  position: relative;
+  height: var(--th-length);
+  background: var(--th-bg);
+}
+
+.th-scroll__sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* 1. Background video */
+.th-scroll__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* 2. Darkening layer (fades in while jacket closes) */
+.th-scroll__shade {
+  position: absolute;
+  inset: 0;
+  background: var(--th-bg);
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 3. Tagline over the video at the start */
+.th-scroll__tagline {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  width: max-content;
+  max-width: 90vw;
+  text-align: center;
+  color: #fff;
+  font: 600 clamp(18px, 2.4vw, 34px)/1.2 "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, .25);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* 4. Big brand word — sits BEHIND the jacket halves */
+.th-scroll__brand {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  font-family: var(--th-font);
+  font-weight: 900;
+  font-size: clamp(64px, 15vw, 260px);
+  line-height: .9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  /* silver / chrome fill like the reference */
+  background: linear-gradient(180deg, #ffffff 0%, #e9e9e9 38%, #9a9a9a 52%, #d6d6d6 70%, #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* 5. Jacket halves */
+.th-scroll__half {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: block;
+  max-width: none;
+  height: auto;
+  z-index: 4;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+  /* keeps them hidden until JS has measured the screen */
+  visibility: hidden;
+}
+
+.th-scroll.is-ready .th-scroll__half { visibility: visible; }
+
+/* Reduced motion: show the final frame, no pinning */
+@media (prefers-reduced-motion: reduce) {
+  .th-scroll { height: auto; }
+  .th-scroll__sticky { position: relative; }
+}

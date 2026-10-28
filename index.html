@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TOO HIGH — scroll animation demo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+
+  <!-- 1) The animation's CSS -->
+  <link rel="stylesheet" href="toohigh-scroll/toohigh-scroll.css">
+
+  <style>
+    /* Demo-page only — your real site already has its own styles */
+    html, body { margin: 0; background: #fff; font-family: "Helvetica Neue", Arial, sans-serif; }
+    .demo-filler { min-height: 100vh; display: grid; place-items: center; color: #111; text-align: center; padding: 0 16px; }
+    .demo-filler h1 { font-size: clamp(28px, 4vw, 48px); margin: 0 0 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- 2) The section (same markup as toohigh-scroll/section.html) -->
+  <section class="th-scroll" data-th-scroll>
+    <div class="th-scroll__sticky">
+      <video class="th-scroll__video"
+             src="toohigh-scroll/assets/hero.mp4"
+             poster="toohigh-scroll/assets/hero-poster.jpg"
+             autoplay muted loop playsinline preload="auto"></video>
+      <div class="th-scroll__shade"></div>
+
+      <p class="th-scroll__tagline">No fixed direction. Just your own.</p>
+      <h2 class="th-scroll__brand">TWO HIIGH</h2>
+
+      <img class="th-scroll__half th-scroll__half--left"  src="toohigh-scroll/assets/left.webp" alt="" aria-hidden="true">
+      <img class="th-scroll__half th-scroll__half--right" src="toohigh-scroll/assets/right.webp" alt="" aria-hidden="true">
+    </div>
+  </section>
+
+  <div class="demo-filler">
+    <div>
+      <h1>Rest of your website continues here</h1>
+      <p>Scroll back up to reverse the animation.</p>
+    </div>
+  </div>
+
+  <!-- 3) The animation's JS, just before </body> -->
+  <script src="toohigh-scroll/toohigh-scroll.js"></script>
+</body>
+</html>
