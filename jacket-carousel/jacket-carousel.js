@@ -7,6 +7,7 @@
 
   var SMOOTHING = 0.09;     // higher = snappier, lower = softer
   var WHEEL_LOCK_MS = 650;  // one jacket per wheel/trackpad gesture
+  var GESTURE_GAP_MS = 180; // wheel events closer together than this count as one gesture
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function pad(n) { return String(n).padStart(2, "0"); }
@@ -21,6 +22,8 @@
     var currentPosition = 0;
     var targetPosition = 0;
     var wheelLocked = false;
+    var lastWheelTime = 0;
+    var gestureStartedPinned = false;
 
     // How far the page can scroll while this section is pinned
     function scrollLength() { return Math.max(1, section.offsetHeight - window.innerHeight); }
@@ -85,15 +88,26 @@
     }
 
     window.addEventListener("wheel", function (event) {
+      // A pause of more than GESTURE_GAP_MS between wheel events starts a new gesture
+      var now = performance.now();
+      var newGesture = now - lastWheelTime > GESTURE_GAP_MS;
+      lastWheelTime = now;
+
+      var pinned = isPinned();
+      if (newGesture) gestureStartedPinned = pinned;
+      if (!pinned) { gestureStartedPinned = false; return; }
+
       if (Math.abs(event.deltaY) < 8) return;
-      // Only take over the wheel while this section is on screen and pinned
-      if (!isPinned()) return;
 
       if (wheelLocked) { event.preventDefault(); return; }
 
       var next = event.deltaY > 0 ? currentIndex + 1 : currentIndex - 1;
       // Past the first/last jacket: let the page scroll normally
       if (next < 0 || next > N - 1) return;
+
+      // Arrived here mid-gesture (e.g. scrolling up out of the next section with
+      // trackpad momentum): hold on this jacket instead of skipping ahead
+      if (!gestureStartedPinned) { event.preventDefault(); return; }
 
       event.preventDefault();
       wheelLocked = true;

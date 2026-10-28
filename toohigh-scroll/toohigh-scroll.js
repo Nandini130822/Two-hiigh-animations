@@ -12,7 +12,8 @@
   // Scrolling down runs it from 1 to 0, so read each step backwards.
   var T = {
     taglineOut: [0.0, 0.15],   // tagline (visible only when open)
-    slide:      [0.05, 1.00],  // jacket halves: off-screen (0) to closed (1) — starts opening right away
+    slide:      [0.05, 0.95],  // jacket halves: off-screen (0) to closed (1); the last 5% is a
+                               // short hold on the closed jacket before the section above returns
     brandIn:    [0.12, 0.35],  // brand word behind the jacket
     darken:     [0.35, 0.90]   // video to black
   };
@@ -22,8 +23,8 @@
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function range(p, r) { return clamp((p - r[0]) / (r[1] - r[0])); }
   function lerp(a, b, t) { return a + (b - a) * t; }
-  // Steep at the closed end so the hands move as soon as you scroll, gentle as they leave
-  function easeSlide(t) { return t * t; }
+  // Moves from the first scroll at the closed end without rushing the close on the way up
+  function easeSlide(t) { return 0.5 * t + 0.5 * t * t; }
   function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 
   function init(section) {
