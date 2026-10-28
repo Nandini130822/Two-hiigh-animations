@@ -45,9 +45,6 @@
       W = box.width;
       H = box.height;
       pinTop = parseFloat(getComputedStyle(sticky).top) || 0;
-      // Screen wider than the video: show the whole frame instead of cropping top/bottom
-      var videoRatio = video && video.videoWidth ? video.videoWidth / video.videoHeight : 16 / 9;
-      section.classList.toggle("is-wide", W / H > videoRatio);
       // Each half: 1.25x screen height, and always wide enough to reach the screen edge
       w = Math.max(H * 1.25 * HALF_RATIO, W * 0.64);
       // Half the gap between the two image edges when closed. The knuckles sit ~9%
@@ -103,7 +100,6 @@
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
-    if (video) video.addEventListener("loadedmetadata", onResize);
 
     // Pause the video when the section is off-screen (saves battery)
     if (video && "IntersectionObserver" in window) {
