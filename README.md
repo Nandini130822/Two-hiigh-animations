@@ -60,6 +60,7 @@ If the folders end up somewhere else (for example `/assets/`), change these path
 | Jacket-zip speed | `--th-length: 600vh;` in `toohigh-scroll.css` (bigger = slower) |
 | Carousel scroll length | `--jc-length: 600vh;` in `jacket-carousel.css` |
 | Header height the carousel leaves room for | `--jc-top: 64px;` in `jacket-carousel.css` |
+| Header height the jacket zip pins below | `--th-top: 64px;` in `toohigh-scroll.css` (56px on phones and tablets; set both to `0` if your site has no fixed header) |
 | Font | `--th-font` in `toohigh-scroll.css` and `font-family` on `.jc` in `jacket-carousel.css` |
 | When each jacket-zip step happens | the `T = { … }` timeline at the top of `toohigh-scroll.js` |
 | How tightly the hands close | `gap = W * 0.14 …` in `toohigh-scroll.js` (smaller number = tighter) |

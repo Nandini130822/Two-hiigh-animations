@@ -43,7 +43,8 @@
       label.textContent = "Jacket " + pad(active + 1);
       num.textContent = pad(active + 1);
 
-      var spacing = Math.min(window.innerHeight * 0.5, 380);
+      // Distance between jackets; on narrow screens keep the side ones peeking in
+      var spacing = Math.min(window.innerHeight * 0.5, 380, window.innerWidth * 0.62);
 
       items.forEach(function (item, index) {
         var diff = index - position;

@@ -35,13 +35,19 @@
     var right   = section.querySelector(".th-scroll__half--right");
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    var W = 0, H = 0, w = 0, gap = 0;
+    var sticky  = section.querySelector(".th-scroll__sticky");
+
+    var W = 0, H = 0, w = 0, gap = 0, pinTop = 0;
     var target = 0, current = 0, ticking = false;
 
     function measure() {
-      var box = section.querySelector(".th-scroll__sticky").getBoundingClientRect();
+      var box = sticky.getBoundingClientRect();
       W = box.width;
       H = box.height;
+      pinTop = parseFloat(getComputedStyle(sticky).top) || 0;
+      // Screen wider than the video: show the whole frame instead of cropping top/bottom
+      var videoRatio = video && video.videoWidth ? video.videoWidth / video.videoHeight : 16 / 9;
+      section.classList.toggle("is-wide", W / H > videoRatio);
       // Each half: 1.25x screen height, and always wide enough to reach the screen edge
       w = Math.max(H * 1.25 * HALF_RATIO, W * 0.64);
       // Half the gap between the two image edges when closed. The knuckles sit ~9%
@@ -54,7 +60,7 @@
     function readScroll() {
       var rect = section.getBoundingClientRect();
       var total = section.offsetHeight - H;
-      var scrolled = total > 0 ? clamp(-rect.top / total) : 0;
+      var scrolled = total > 0 ? clamp((pinTop - rect.top) / total) : 0;
       // Starts closed at the top; scrolling down opens the jacket
       target = 1 - scrolled;
     }
@@ -97,6 +103,7 @@
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
+    if (video) video.addEventListener("loadedmetadata", onResize);
 
     // Pause the video when the section is off-screen (saves battery)
     if (video && "IntersectionObserver" in window) {

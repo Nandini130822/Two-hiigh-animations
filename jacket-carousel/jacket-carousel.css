@@ -161,3 +161,20 @@
   .jc__counter { bottom: 20px; font-size: 10px; }
   .jc__counter-line { width: 40px; }
 }
+
+/* Phones (portrait): heading moves to the top, model + jackets fit the width below it */
+@media (max-width: 600px) and (orientation: portrait) {
+  .jc__copy {
+    top: calc(var(--jc-top) + 40px);
+    transform: none;
+    max-width: none;
+    right: var(--jc-gutter);
+  }
+  .jc__copy h1 { font-size: 30px; }
+  .jc__copy h1 br { display: none; }
+  .jc__copy p { font-size: 12px; margin-top: 8px; }
+  .jc__model, .jc__item { width: min(86vw, 46vh); height: 64vh; }
+  .jc__model { top: 60%; }
+  /* keeps the same jacket-to-model offset as desktop, scaled to the smaller height */
+  .jc__item  { top: calc(60% + 5.5vh); }
+}
