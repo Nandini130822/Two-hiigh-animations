@@ -102,6 +102,33 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
 
+    // Scrolling up: don't let the page leave the top of this section until the
+    // jacket has finished closing (the animation trails the scroll slightly)
+    function shouldHoldUpward() {
+      // Still pinned (not already scrolled back down past the section top)
+      var stillPinned = section.getBoundingClientRect().top <= pinTop + 1;
+      // In the short closed hold at the top of the section
+      var inClosedZone = target >= T.slide[1];
+      var notClosedYet = current < T.slide[1];
+      return stillPinned && inClosedZone && notClosedYet;
+    }
+
+    window.addEventListener("wheel", function (event) {
+      if (event.deltaY < 0 && shouldHoldUpward()) event.preventDefault();
+    }, { passive: false });
+
+    var touchY = null;
+    window.addEventListener("touchstart", function (event) {
+      touchY = event.touches[0].clientY;
+    }, { passive: true });
+    window.addEventListener("touchmove", function (event) {
+      if (touchY === null) return;
+      var y = event.touches[0].clientY;
+      var scrollingUp = y > touchY; // finger moving down = page scrolling up
+      touchY = y;
+      if (scrollingUp && shouldHoldUpward()) event.preventDefault();
+    }, { passive: false });
+
     // Pause the video when the section is off-screen (saves battery)
     if (video && "IntersectionObserver" in window) {
       new IntersectionObserver(function (entries) {
