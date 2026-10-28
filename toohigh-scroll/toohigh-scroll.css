@@ -5,9 +5,9 @@
 
 .th-scroll {
   /* ---- Tweak these ---- */
-  --th-length: 400vh;          /* how much scrolling the animation lasts */
+  --th-length: 600vh;          /* how much scrolling the animation lasts */
   --th-bg: #000;               /* colour the video fades to */
-  --th-font: "Archivo Black", "Helvetica Neue", Arial, sans-serif;
+  --th-font: "Boogaloo", sans-serif;
 
   position: relative;
   height: var(--th-length);
@@ -54,7 +54,7 @@
   max-width: 90vw;
   text-align: center;
   color: #fff;
-  font: 600 clamp(18px, 2.4vw, 34px)/1.2 "Helvetica Neue", Arial, sans-serif;
+  font: 400 clamp(20px, 2.6vw, 38px)/1.2 var(--th-font);
   letter-spacing: -0.01em;
   text-shadow: 0 2px 20px rgba(0, 0, 0, .25);
   z-index: 2;
@@ -70,7 +70,7 @@
   transform: translate(-50%, -50%);
   white-space: nowrap;
   font-family: var(--th-font);
-  font-weight: 900;
+  font-weight: 400;
   font-size: clamp(64px, 15vw, 260px);
   line-height: .9;
   letter-spacing: -0.02em;

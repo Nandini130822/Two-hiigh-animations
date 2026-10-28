@@ -1,0 +1,163 @@
+/* ==========================================================================
+   TWO HIIGH — "The Jacket Collection" scroll carousel
+   Pins while you scroll through it, one jacket per scroll step,
+   then lets the page carry on to the next section.
+   ========================================================================== */
+
+.jc {
+  /* ---- Tweak these ---- */
+  --jc-length: 600vh;   /* total scroll for the 5 jackets */
+  --jc-gutter: 44px;    /* left/right padding for the text */
+  --jc-top: 64px;       /* height of your fixed site header (0 if none) */
+
+  position: relative;
+  height: var(--jc-length);
+  background: #fff;
+  color: #111;
+  font-family: "Boogaloo", sans-serif;
+}
+
+.jc *, .jc *::before, .jc *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.jc__stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #fff;
+}
+
+.jc__eyebrow {
+  position: absolute;
+  top: calc(var(--jc-top) + 24px);
+  left: var(--jc-gutter);
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: #aaa;
+  z-index: 50;
+}
+
+.jc__copy {
+  position: absolute;
+  left: var(--jc-gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  max-width: 360px;
+}
+
+.jc__copy h1 {
+  font-size: 48px;
+  line-height: .95;
+  font-weight: 400;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+
+.jc__copy p {
+  margin-top: 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #666;
+}
+
+/* Model */
+.jc__model {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(45vh, 560px);
+  height: 88vh;
+  z-index: 5;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jc__model img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Carousel */
+.jc__carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.jc__item {
+  position: absolute;
+  top: 57.5%;
+  left: 50%;
+  width: min(45vh, 560px);
+  height: 88vh;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+.jc__item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .15));
+  transform: translateY(-8%) translateX(3%);
+}
+
+.jc__label {
+  position: absolute;
+  left: var(--jc-gutter);
+  bottom: 34px;
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: #111;
+  z-index: 50;
+}
+
+.jc__counter {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 34px;
+  font-size: 11px;
+  letter-spacing: .15em;
+  color: #111;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.jc__counter-line {
+  width: 70px;
+  height: 1px;
+  background: #111;
+}
+
+.jc__counter-total { color: #999; }
+
+@media (max-width: 900px) {
+  .jc { --jc-gutter: 20px; --jc-top: 56px; }
+  .jc__eyebrow { top: calc(var(--jc-top) + 14px); }
+  .jc__copy { max-width: 200px; }
+  .jc__copy h1 { font-size: 26px; }
+  .jc__copy p { font-size: 10px; }
+  .jc__model, .jc__item { width: min(55vh, 400px); height: 82vh; }
+  .jc__item img { transform: translateY(-7%) translateX(2%); }
+  .jc__label { bottom: 20px; font-size: 9px; }
+  .jc__counter { bottom: 20px; font-size: 10px; }
+  .jc__counter-line { width: 40px; }
+}

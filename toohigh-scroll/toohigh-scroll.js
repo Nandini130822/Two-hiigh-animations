@@ -17,7 +17,7 @@
     darken:     [0.35, 0.60]   // video to black
   };
 
-  var SMOOTHING = 0.12; // 0..1 — lower = floatier, 1 = instant
+  var SMOOTHING = 0.08; // 0..1 — lower = floatier, 1 = instant
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function range(p, r) { return clamp((p - r[0]) / (r[1] - r[0])); }

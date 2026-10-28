@@ -3,25 +3,85 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TOO HIGH — scroll animation demo</title>
+  <title>TWO HIIGH — scroll animations demo</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&display=swap" rel="stylesheet">
 
-  <!-- 1) The animation's CSS -->
+  <!-- Animation CSS -->
+  <link rel="stylesheet" href="jacket-carousel/jacket-carousel.css">
   <link rel="stylesheet" href="toohigh-scroll/toohigh-scroll.css">
 
   <style>
     /* Demo-page only — your real site already has its own styles */
-    html, body { margin: 0; background: #fff; font-family: "Helvetica Neue", Arial, sans-serif; }
+    html, body { margin: 0; background: #fff; font-family: "Boogaloo", sans-serif; }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 44px; background: #fff; z-index: 200; border-bottom: 1px solid #f0f0f0;
+      box-sizing: border-box;
+    }
+    .nav-left { display: flex; gap: 36px; font-size: 13px; font-weight: 500; }
+    .nav-left a { color: #111; text-decoration: none; }
+    .nav-center { position: absolute; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: 400; letter-spacing: .12em; }
+    .nav-right svg { width: 20px; height: 20px; stroke: #111; fill: none; stroke-width: 1.6; display: block; }
+    @media (max-width: 900px) {
+      .nav { padding: 0 20px; height: 56px; }
+      .nav-left { gap: 20px; font-size: 12px; }
+    }
+
     .demo-filler { min-height: 100vh; display: grid; place-items: center; color: #111; text-align: center; padding: 0 16px; }
     .demo-filler h1 { font-size: clamp(28px, 4vw, 48px); margin: 0 0 8px; }
   </style>
 </head>
 <body>
 
-  <!-- 2) The section (same markup as toohigh-scroll/section.html) -->
+  <nav class="nav">
+    <div class="nav-left">
+      <a href="#">Home</a>
+      <a href="#">Products</a>
+    </div>
+    <div class="nav-center">TWO HIIGH</div>
+    <div class="nav-right">
+      <svg viewBox="0 0 24 24"><path d="M6 2l1 3h10l1-3M4 6h16l-1.5 15h-13L4 6z"/></svg>
+    </div>
+  </nav>
+
+  <!-- 1) Jacket Collection carousel (same markup as jacket-carousel/section.html) -->
+  <section class="jc" data-jc>
+    <div class="jc__stage">
+      <div class="jc__eyebrow">The Jacket Collection</div>
+
+      <div class="jc__copy">
+        <h1>The Jacket<br>Collection</h1>
+        <p>Designed for movement.<br>Built for every moment.</p>
+      </div>
+
+      <div class="jc__model">
+        <img src="jacket-carousel/assets/model.webp" alt="Model">
+      </div>
+
+      <div class="jc__carousel">
+        <div class="jc__item"><img src="jacket-carousel/assets/jacket1.webp" alt="Jacket 01"></div>
+        <div class="jc__item"><img src="jacket-carousel/assets/jacket2.webp" alt="Jacket 02"></div>
+        <div class="jc__item"><img src="jacket-carousel/assets/jacket3.webp" alt="Jacket 03"></div>
+        <div class="jc__item"><img src="jacket-carousel/assets/jacket4.webp" alt="Jacket 04"></div>
+        <div class="jc__item"><img src="jacket-carousel/assets/jacket5.webp" alt="Jacket 05"></div>
+      </div>
+
+      <div class="jc__label">Jacket 01</div>
+
+      <div class="jc__counter">
+        <span class="jc__current">01</span>
+        <span class="jc__counter-line"></span>
+        <span class="jc__counter-total">05</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) Jacket-zip hero (same markup as toohigh-scroll/section.html) -->
   <section class="th-scroll" data-th-scroll>
     <div class="th-scroll__sticky">
       <video class="th-scroll__video"
@@ -41,11 +101,12 @@
   <div class="demo-filler">
     <div>
       <h1>Rest of your website continues here</h1>
-      <p>Scroll back up to reverse the animation.</p>
+      <p>Scroll back up to reverse the animations.</p>
     </div>
   </div>
 
-  <!-- 3) The animation's JS, just before </body> -->
+  <!-- Animation JS, just before </body> -->
+  <script src="jacket-carousel/jacket-carousel.js"></script>
   <script src="toohigh-scroll/toohigh-scroll.js"></script>
 </body>
 </html>
