@@ -107,13 +107,27 @@
   will-change: transform, opacity;
 }
 
+/* Garment images are 656x834: 50px wider on each side than the model image,
+   so wide sleeves fit. 118% keeps them at the model's scale. */
 .jc__item img {
-  max-width: 100%;
+  flex: none;
+  max-width: 118%;
   max-height: 100%;
   object-fit: contain;
   display: block;
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .15));
   transform: translateY(-8%) translateX(3%);
+}
+
+/* Inside back collar + label. Hidden while the piece is on the model (so his
+   neck comes through the collar), shown when the piece is off to the side. */
+.jc__item .jc__back {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  filter: none;
+  opacity: 0;
 }
 
 .jc__label {

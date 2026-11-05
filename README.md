@@ -13,7 +13,7 @@ jacket-carousel/
   jacket-carousel.css
   jacket-carousel.js
   section.html             ← HTML to paste into your page
-  assets/  model.webp, jacket1–5.webp
+  assets/  model.webp, tee1–5.webp (worn layer), tee1–5-back.webp (back collar + label)
 index.html                 ← demo page with the carousel and the site nav
 ```
 

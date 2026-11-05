@@ -14,6 +14,7 @@
 
   function init(section) {
     var items = [].slice.call(section.querySelectorAll(".jc__item"));
+    var backs = items.map(function (item) { return item.querySelector(".jc__back"); });
     var label = section.querySelector(".jc__label");
     var num = section.querySelector(".jc__current");
     var N = items.length;
@@ -43,7 +44,7 @@
 
     function render(position) {
       var active = clamp(Math.round(position), 0, N - 1);
-      label.textContent = "Jacket " + pad(active + 1);
+      label.textContent = "Piece " + pad(active + 1);
       num.textContent = pad(active + 1);
 
       // Distance between jackets; on narrow screens keep the side ones peeking in
@@ -69,6 +70,8 @@
         item.style.transform = "translate(calc(-50% + " + x + "px),-50%) scale(" + scale + ")";
         item.style.opacity = opacity;
         item.style.zIndex = z;
+        // Worn look on the model; the full garment (back collar + label) fades in as it moves off
+        if (backs[index]) backs[index].style.opacity = Math.min(Math.abs(diff) / 0.5, 1);
       });
     }
 
