@@ -6,7 +6,7 @@
 
 .jc {
   /* ---- Tweak these ---- */
-  --jc-length: 600vh;   /* total scroll for the 5 jackets */
+  --jc-length: 600vh;   /* total scroll for the 5 pieces */
   --jc-gutter: 44px;    /* left/right padding for the text */
   --jc-top: 64px;       /* height of your fixed site header (0 if none) */
 
