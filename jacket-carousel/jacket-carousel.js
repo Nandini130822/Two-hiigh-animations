@@ -71,7 +71,7 @@
         item.style.opacity = opacity;
         item.style.zIndex = z;
         // Worn look on the model; the full garment (back collar + label) fades in as it moves off
-        if (backs[index]) backs[index].style.opacity = Math.min(Math.abs(diff) / 0.5, 1);
+        if (backs[index]) backs[index].style.opacity = Math.min(Math.abs(diff) / 0.12, 1);
       });
     }
 
