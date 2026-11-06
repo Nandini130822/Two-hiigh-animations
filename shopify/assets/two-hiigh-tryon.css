@@ -1,0 +1,195 @@
+/* ==========================================================================
+   TWO HIIGH — scroll try-on carousel
+   Shopify asset: two-hiigh-tryon.css — used by sections/two-hiigh-tryon.liquid.
+   The section sets --jc-length, --jc-top-desktop, --jc-top-mobile, --jc-bg and
+   --jc-text inline from its theme-editor settings.
+   ========================================================================== */
+
+.jc {
+  --jc-gutter: 44px;                            /* left/right padding for the text */
+  --jc-top: var(--jc-top-desktop, 64px);        /* height of the sticky header */
+
+  position: relative;
+  height: var(--jc-length, 600vh);
+  background: var(--jc-bg, #fff);
+  color: var(--jc-text, #111);
+  font-family: var(--jc-font, "Boogaloo", sans-serif);
+}
+
+.jc *, .jc *::before, .jc *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* The images carry width/height attributes (for Shopify); keep their natural
+   proportions and let max-width/max-height do the sizing */
+.jc__body,
+.jc__item img { width: auto; height: auto; }
+
+/* "Same as the theme" font setting: take the font from the theme instead of Boogaloo */
+.jc--theme-font,
+.jc--theme-font .jc__title,
+.jc--theme-font .jc__text { font-family: inherit; }
+
+.jc__stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--jc-bg, #fff);
+}
+
+.jc__eyebrow {
+  position: absolute;
+  top: calc(var(--jc-top) + 24px);
+  left: var(--jc-gutter);
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: #aaa;
+  z-index: 50;
+}
+
+.jc__copy {
+  position: absolute;
+  left: var(--jc-gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  max-width: 360px;
+}
+
+/* font-family and colour are set here so the theme's own heading styles don't leak in */
+.jc__title {
+  font-family: var(--jc-font, "Boogaloo", sans-serif);
+  color: var(--jc-text, #111);
+  font-size: 48px;
+  line-height: .95;
+  font-weight: 400;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+
+.jc__text {
+  font-family: var(--jc-font, "Boogaloo", sans-serif);
+  margin-top: 18px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #666;
+}
+
+/* Model: his body under each piece (head, arms, a plain vest, jeans). JS cross-fades
+   between the five bodies; body N plus worn piece N is exactly his photo in piece N. */
+.jc__model {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(45vh, 560px);
+  height: 88vh;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.jc__body {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.jc__body:first-child { opacity: 1; }
+
+/* Carousel: the pieces. Each has two images on the same canvas as the bodies:
+   the piece as he wears it (.jc__worn) and the flat product shot (.jc__flat). */
+.jc__carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.jc__item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(45vh, 560px);
+  height: 88vh;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+.jc__item img {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.jc__flat { filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .15)); }
+
+.jc__label {
+  position: absolute;
+  left: var(--jc-gutter);
+  bottom: 34px;
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--jc-text, #111);
+  z-index: 50;
+}
+
+.jc__counter {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 34px;
+  font-size: 11px;
+  letter-spacing: .15em;
+  color: var(--jc-text, #111);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.jc__counter-line {
+  width: 70px;
+  height: 1px;
+  background: var(--jc-text, #111);
+}
+
+.jc__counter-total { color: #999; }
+
+@media (max-width: 900px) {
+  .jc { --jc-gutter: 20px; --jc-top: var(--jc-top-mobile, 56px); }
+  .jc__eyebrow { top: calc(var(--jc-top) + 14px); }
+  .jc__copy { max-width: 200px; }
+  .jc__title { font-size: 26px; }
+  .jc__text { font-size: 10px; }
+  .jc__model, .jc__item { width: min(55vh, 400px); height: 82vh; }
+  .jc__label { bottom: 20px; font-size: 9px; }
+  .jc__counter { bottom: 20px; font-size: 10px; }
+  .jc__counter-line { width: 40px; }
+}
+
+/* Phones (portrait): heading moves to the top, model + jackets fit the width below it */
+@media (max-width: 600px) and (orientation: portrait) {
+  .jc__copy {
+    top: calc(var(--jc-top) + 40px);
+    transform: none;
+    max-width: none;
+    right: var(--jc-gutter);
+  }
+  .jc__title { font-size: 30px; }
+  .jc__title br { display: none; }
+  .jc__text { font-size: 12px; margin-top: 8px; }
+  .jc__model, .jc__item { width: min(86vw, 46vh); height: 64vh; top: 60%; }
+}

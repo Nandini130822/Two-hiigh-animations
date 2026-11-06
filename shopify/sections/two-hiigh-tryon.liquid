@@ -1,0 +1,340 @@
+{%- comment -%}
+  TWO HIIGH — scroll try-on carousel
+
+  The model stands in the middle. On each scroll the piece he is wearing slides
+  off and the next one slides on. One swipe moves exactly one piece.
+
+  Needs these files in the theme's assets folder:
+    two-hiigh-tryon.css, two-hiigh-tryon.js
+    tryon-body1..5.webp, tryon-worn1..5.webp, tryon-flat1..5.webp  (built-in images)
+
+  Each "Piece" block uses three images on the same canvas (800 x 1165):
+    body  = the model without the piece (transparent background)
+    worn  = only the piece, cut out exactly as he wears it
+    flat  = the flat product shot
+  "body" with "worn" on top must reproduce the photo of him wearing the piece.
+{%- endcomment -%}
+
+{{ 'two-hiigh-tryon.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  The store's own font is used by default. Only when "Boogaloo (Google Fonts)" is
+  chosen is the font loaded from Google, which is why RemoteAsset is switched off here.
+{%- endcomment -%}
+{%- if section.settings.font == 'boogaloo' -%}
+  {% # theme-check-disable RemoteAsset %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&display=swap" rel="stylesheet">
+  {% # theme-check-enable RemoteAsset %}
+{%- endif -%}
+
+{%- liquid
+  assign piece_count = section.blocks.size
+  assign scroll_length = piece_count | times: section.settings.scroll_per_piece | plus: 100
+
+  if piece_count < 10
+    assign total_label = piece_count | prepend: '0'
+  else
+    assign total_label = piece_count
+  endif
+
+  assign piece_label = section.settings.piece_label | default: 'Piece'
+-%}
+
+<div
+  id="TwoHiighTryon-{{ section.id }}"
+  class="jc{% if section.settings.font == 'theme' %} jc--theme-font{% endif %}"
+  data-jc
+  data-jc-label="{{ piece_label | escape }}"
+  style="--jc-length: {{ scroll_length }}vh; --jc-top-desktop: {{ section.settings.header_offset }}px; --jc-top-mobile: {{ section.settings.header_offset_mobile }}px; --jc-bg: {{ section.settings.background }}; --jc-text: {{ section.settings.text_color }};"
+>
+  <div class="jc__stage">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="jc__eyebrow">{{ section.settings.eyebrow | escape }}</div>
+    {%- endif -%}
+
+    <div class="jc__copy">
+      {%- if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank -%}
+        <{{ section.settings.heading_tag }} class="jc__title">
+          {{- section.settings.heading_line_1 | escape -}}
+          {%- if section.settings.heading_line_1 != blank and section.settings.heading_line_2 != blank -%}
+            <br>{{ ' ' }}
+          {%- endif -%}
+          {{- section.settings.heading_line_2 | escape -}}
+        </{{ section.settings.heading_tag }}>
+      {%- endif -%}
+      {%- if section.settings.subtext != blank -%}
+        <p class="jc__text">{{ section.settings.subtext | escape | newline_to_br }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="jc__model" role="img" aria-label="{{ section.settings.model_alt | escape }}">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.body_image != blank -%}
+          <img
+            class="jc__body"
+            src="{{ block.settings.body_image | image_url: width: 1000 }}"
+            alt=""
+            width="{{ block.settings.body_image.width }}"
+            height="{{ block.settings.body_image.height }}"
+            decoding="async"
+          >
+        {%- else -%}
+          <img
+            class="jc__body"
+            src="{{ 'tryon-body' | append: block.settings.builtin | append: '.webp' | asset_url }}"
+            alt=""
+            width="800"
+            height="1165"
+            decoding="async"
+          >
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="jc__carousel">
+      {%- for block in section.blocks -%}
+        <div class="jc__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.flat_image != blank -%}
+            <img
+              class="jc__flat"
+              src="{{ block.settings.flat_image | image_url: width: 1000 }}"
+              alt="{{ block.settings.title | escape }}"
+              width="{{ block.settings.flat_image.width }}"
+              height="{{ block.settings.flat_image.height }}"
+              decoding="async"
+            >
+          {%- else -%}
+            <img
+              class="jc__flat"
+              src="{{ 'tryon-flat' | append: block.settings.builtin | append: '.webp' | asset_url }}"
+              alt="{{ block.settings.title | escape }}"
+              width="800"
+              height="1165"
+              decoding="async"
+            >
+          {%- endif -%}
+          {%- if block.settings.worn_image != blank -%}
+            <img
+              class="jc__worn"
+              src="{{ block.settings.worn_image | image_url: width: 1000 }}"
+              alt=""
+              width="{{ block.settings.worn_image.width }}"
+              height="{{ block.settings.worn_image.height }}"
+              decoding="async"
+            >
+          {%- else -%}
+            <img
+              class="jc__worn"
+              src="{{ 'tryon-worn' | append: block.settings.builtin | append: '.webp' | asset_url }}"
+              alt=""
+              width="800"
+              height="1165"
+              decoding="async"
+            >
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="jc__label">{{ piece_label | escape }} 01</div>
+
+    <div class="jc__counter">
+      <span class="jc__current">01</span>
+      <span class="jc__counter-line"></span>
+      <span class="jc__counter-total">{{ total_label }}</span>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'two-hiigh-tryon.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "TWO HIIGH try-on",
+  "tag": "section",
+  "class": "two-hiigh-tryon-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small label (top left)",
+      "default": "The Jacket Collection"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading, line 1",
+      "default": "The Jacket"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading, line 2",
+      "default": "Collection"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading level",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "p", "label": "Paragraph" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Text under the heading",
+      "default": "Designed for movement.\nBuilt for every moment."
+    },
+    {
+      "type": "text",
+      "id": "piece_label",
+      "label": "Counter label",
+      "info": "Shown bottom left with the number, for example: Piece 01",
+      "default": "Piece"
+    },
+    {
+      "type": "text",
+      "id": "model_alt",
+      "label": "Description of the model image (for screen readers)",
+      "default": "Model wearing the selected piece"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "header_offset",
+      "label": "Sticky header height (desktop)",
+      "info": "Space the section leaves at the top for a sticky header. Use 0 if the header is not sticky.",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "header_offset_mobile",
+      "label": "Sticky header height (mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "scroll_per_piece",
+      "label": "Scroll distance per piece",
+      "info": "In percent of the screen height. Higher feels slower.",
+      "min": 60,
+      "max": 160,
+      "step": 10,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "Font",
+      "info": "Use \"Same as the theme\" when the store already uses Boogaloo.",
+      "options": [
+        { "value": "theme", "label": "Same as the theme" },
+        { "value": "boogaloo", "label": "Boogaloo (Google Fonts)" }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111111"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "piece",
+      "name": "Piece",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name",
+          "info": "Used as the image description.",
+          "default": "Piece"
+        },
+        {
+          "type": "select",
+          "id": "builtin",
+          "label": "Built-in images",
+          "info": "Used for any image below that is left empty.",
+          "options": [
+            { "value": "1", "label": "1: Black butterfly tee" },
+            { "value": "2", "label": "2: Out of the loop tee" },
+            { "value": "3", "label": "3: Clouds sleeveless tee" },
+            { "value": "4", "label": "4: Skull sleeveless tee" },
+            { "value": "5", "label": "5: Navy floral tee" }
+          ],
+          "default": "1"
+        },
+        {
+          "type": "image_picker",
+          "id": "body_image",
+          "label": "Model without this piece",
+          "info": "Transparent background, 800 x 1165 px. Head, arms, vest and jeans only."
+        },
+        {
+          "type": "image_picker",
+          "id": "worn_image",
+          "label": "Piece as worn",
+          "info": "Only the piece, cut out exactly as he wears it. Same canvas as the model image."
+        },
+        {
+          "type": "image_picker",
+          "id": "flat_image",
+          "label": "Flat product shot",
+          "info": "Transparent background, same canvas as the model image."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "TWO HIIGH try-on",
+      "blocks": [
+        { "type": "piece", "settings": { "title": "Black butterfly tee", "builtin": "1" } },
+        { "type": "piece", "settings": { "title": "Out of the loop tee", "builtin": "2" } },
+        { "type": "piece", "settings": { "title": "Clouds sleeveless tee", "builtin": "3" } },
+        { "type": "piece", "settings": { "title": "Skull sleeveless tee", "builtin": "4" } },
+        { "type": "piece", "settings": { "title": "Navy floral tee", "builtin": "5" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

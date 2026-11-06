@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TWO HIIGH — "The Jacket Collection" scroll carousel
+   TWO HIIGH — scroll try-on carousel
    Drives every [data-jc] section on the page. No libraries needed.
    ========================================================================== */
 (function () {
@@ -18,6 +18,9 @@
   function pad(n) { return String(n).padStart(2, "0"); }
 
   function init(section) {
+    if (section.jcReady) return;      // never wire the same section twice
+    section.jcReady = true;
+    var labelPrefix = section.getAttribute("data-jc-label") || "Piece";
     var items = [].slice.call(section.querySelectorAll(".jc__item"));
     var bodies = [].slice.call(section.querySelectorAll(".jc__body"));
     var wornImgs = items.map(function (item) { return item.querySelector(".jc__worn"); });
@@ -25,6 +28,7 @@
     var label = section.querySelector(".jc__label");
     var num = section.querySelector(".jc__current");
     var N = items.length;
+    if (!N) return;                   // nothing to show yet
 
     var currentIndex = 0;
     var currentPosition = 0;
@@ -52,7 +56,7 @@
 
     function render(position) {
       var active = clamp(Math.round(position), 0, N - 1);
-      label.textContent = "Piece " + pad(active + 1);
+      label.textContent = labelPrefix + " " + pad(active + 1);
       num.textContent = pad(active + 1);
 
       // Distance between pieces; on narrow screens keep the side ones peeking in
@@ -95,6 +99,7 @@
     }
 
     function animate() {
+      if (!section.isConnected) return;   // section was removed (e.g. re-rendered in a theme editor)
       var difference = targetPosition - currentPosition;
       currentPosition += difference * SMOOTHING;
       if (Math.abs(difference) < 0.001) currentPosition = targetPosition;
@@ -110,6 +115,7 @@
     }
 
     window.addEventListener("wheel", function (event) {
+      if (!section.isConnected) return;
       // A pause of more than GESTURE_GAP_MS between wheel events starts a new gesture
       var now = performance.now();
       var newGesture = now - lastWheelTime > GESTURE_GAP_MS;
@@ -151,6 +157,7 @@
 
     function snapToPiece() {
       snapTimer = null;
+      if (!section.isConnected) return;
       if (touching || wheelLocked || !isPinned()) return;
       var position = positionFromScroll();
       if (Math.abs(position - Math.round(position)) < 0.01) return;      // already on a piece
@@ -167,6 +174,7 @@
     }
 
     window.addEventListener("scroll", function () {
+      if (!section.isConnected) return;
       var position = positionFromScroll();
       if (lastScrollPosition !== null && Math.abs(position - lastScrollPosition) > 0.0005) {
         scrollDirection = position > lastScrollPosition ? 1 : -1;
@@ -183,7 +191,14 @@
     window.addEventListener("touchend", function () { touching = false; scheduleSnap(); }, { passive: true });
     window.addEventListener("touchcancel", function () { touching = false; scheduleSnap(); }, { passive: true });
 
+    // Shopify theme editor: clicking a piece in the sidebar shows that piece
+    section.addEventListener("shopify:block:select", function (event) {
+      var index = items.indexOf(event.target);
+      if (index >= 0) goToJacket(index);
+    });
+
     window.addEventListener("resize", function () {
+      if (!section.isConnected) return;
       currentPosition = targetPosition = positionFromScroll();
       currentIndex = Math.round(currentPosition);
       render(currentPosition);
@@ -195,11 +210,14 @@
     requestAnimationFrame(animate);
   }
 
-  function boot() {
-    var sections = document.querySelectorAll("[data-jc]");
+  function boot(root) {
+    var sections = (root && root.querySelectorAll ? root : document).querySelectorAll("[data-jc]");
     for (var i = 0; i < sections.length; i++) init(sections[i]);
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { boot(); });
   else boot();
+
+  // Shopify theme editor: a section that is added or re-rendered needs wiring up again
+  document.addEventListener("shopify:section:load", function (event) { boot(event.target); });
 })();
