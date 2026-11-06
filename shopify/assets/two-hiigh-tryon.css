@@ -104,8 +104,9 @@
 
 .jc__body:first-child { opacity: 1; }
 
-/* Carousel: the pieces. Each has two images on the same canvas as the bodies:
-   the piece as he wears it (.jc__worn) and the flat product shot (.jc__flat). */
+/* Carousel: the pieces. Each is one image on the same canvas as the body: the
+   piece cut out exactly as he wears it, front only. It looks the same waiting
+   at the side as it does on him. */
 .jc__carousel {
   position: absolute;
   inset: 0;
@@ -133,7 +134,9 @@
   display: block;
 }
 
-.jc__flat { filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .15)); }
+/* A soft shadow lifts the piece off the page at the side and fades to nothing
+   as it reaches him (JS sets --jc-away: 0 on him, 1 at the side). */
+.jc__worn { filter: drop-shadow(0 20px 40px rgba(0, 0, 0, calc(.15 * var(--jc-away, 0)))); }
 
 .jc__label {
   position: absolute;

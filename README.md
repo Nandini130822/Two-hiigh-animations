@@ -2,7 +2,7 @@
 
 A scroll animation in plain HTML, CSS and JS with **no libraries and no Shopify**, so it works on any website. All text uses the site font, **Boogaloo**.
 
-**Try-on carousel** (`jacket-carousel/`): the model stands in the middle. On each scroll, the piece he's wearing slides off his body and the next one slides on (01 → 05: three tees and two sleeveless tees). Pieces waiting at the sides show as flat product shots. One swipe moves exactly one piece, and if scrolling stops in between, it finishes the move by itself. The section stays pinned on screen for about 5 screen-heights of scrolling, then the page scrolls on normally.
+**Try-on carousel** (`jacket-carousel/`): the model stands in the middle. On each scroll, the piece he's wearing slides off his body and the next one slides on (01 → 05: three tees and two sleeveless tees). Pieces waiting at the sides look exactly as they do on him, front only. One swipe moves exactly one piece, and if scrolling stops in between, it finishes the move by itself. The section stays pinned on screen for about 5 screen-heights of scrolling, then the page scrolls on normally.
 
 > The jacket-zip animation ("TWO HIIGH" behind the opening jacket, with the hero video) is removed for now. It's saved in git history at commit `65a570b`, so it can be added back exactly as it was.
 
@@ -13,7 +13,7 @@ jacket-carousel/
   jacket-carousel.css
   jacket-carousel.js
   section.html             ← HTML to paste into your page
-  assets/  body.webp (the model without a piece), worn1–5.webp (each piece as worn), flat1–5.webp (flat product shots)
+  assets/  body.webp (the model without a piece), worn1–5.webp (each piece as worn, front only)
 index.html                 ← demo page with the carousel and the site nav
 ```
 
@@ -36,6 +36,8 @@ index.html                 ← demo page with the carousel and the site nav
 ```
 
 If the folder ends up somewhere else (for example `/assets/`), change these paths and the `src=` paths in the pasted HTML to match.
+
+When you later replace these files with a newer version, replace the HTML, CSS and JS together, and add a version to the links (for example `jacket-carousel.js?v=2`) so browsers don't pair an old cached script with new HTML.
 
 ### If your site is built with…
 
@@ -61,7 +63,6 @@ All images share one 800 × 1165 canvas so they line up:
 
 - `body.webp`: the model without a piece (head, arms, plain vest, jeans), transparent background. One image, used for every piece.
 - `wornN.webp`: only piece N, cut out exactly as he wears it in the photo
-- `flatN.webp`: the flat product shot of piece N, placed roughly where he wears it
 
 `wornN` laid over `body.webp` must look like him wearing piece N. Because the body never changes, his arms and hands stay the same while pieces slide on and off. To add or remove a piece, add or remove its `<div class="jc__item">` in the HTML, update the `05` in `.jc__counter-total`, and adjust `--jc-length` (about 100vh per piece, plus 100vh).
 

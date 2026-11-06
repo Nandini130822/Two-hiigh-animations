@@ -12,8 +12,6 @@
   var SNAP_DELAY_MS = 140;  // scrolling counts as stopped after this long without movement
   var SNAP_COMMIT = 0.15;   // past this share of the way, snapping finishes the move instead of going back
   var REST_ZONE = 0.05;     // scroll slack around each piece before it starts to move
-  var WORN_FROM = 0.75;     // closer to him than this, the piece morphs to its worn shape...
-  var WORN_BLEND = 0.35;    // ...over this much of the slide
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function pad(n) { return String(n).padStart(2, "0"); }
@@ -24,8 +22,6 @@
     var labelPrefix = section.getAttribute("data-jc-label") || "Piece";
     var items = [].slice.call(section.querySelectorAll(".jc__item"));
     var bodies = [].slice.call(section.querySelectorAll(".jc__body"));
-    var wornImgs = items.map(function (item) { return item.querySelector(".jc__worn"); });
-    var flatImgs = items.map(function (item) { return item.querySelector(".jc__flat"); });
     var label = section.querySelector(".jc__label");
     var num = section.querySelector(".jc__current");
     var N = items.length;
@@ -85,11 +81,9 @@
         item.style.opacity = opacity;
         item.style.zIndex = 30 - Math.round(Math.min(d, 2) * 10);
 
-        // Near him the piece is in its worn shape (cut from his photo), so it lands
-        // pixel-for-pixel on his body; out at the side it is the flat product shot.
-        var worn = clamp((WORN_FROM - away) / WORN_BLEND, 0, 1);
-        wornImgs[index].style.opacity = worn;
-        flatImgs[index].style.opacity = 1 - worn;
+        // The piece keeps its as-worn shape everywhere, so it lands pixel-for-pixel on
+        // his body. --jc-away (0 on him, 1 at the side) drives the side shadow in CSS.
+        item.style.setProperty("--jc-away", Math.min(away, 1).toFixed(3));
       });
 
       // His body under the pieces. Normally there is one body image and it never

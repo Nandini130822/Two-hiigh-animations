@@ -12,13 +12,12 @@ assets/
   two-hiigh-tryon.js            scroll logic
   tryon-body.webp               built-in image: the model without a piece
   tryon-worn1..5.webp           built-in images: each piece as worn
-  tryon-flat1..5.webp           built-in images: flat product shots
 ```
 
 ## Install
 
 1. Copy `sections/two-hiigh-tryon.liquid` into the theme's `sections/` folder.
-2. Copy everything in `assets/` into the theme's `assets/` folder (13 files). The file names must stay as they are.
+2. Copy everything in `assets/` into the theme's `assets/` folder (8 files). The file names must stay as they are.
 3. In the theme editor, open the template that should show it, choose **Add section → TWO HIIGH try-on**, and save.
 
 With Shopify CLI, from the theme folder:
@@ -49,8 +48,8 @@ The section adds itself with its 5 pieces and built-in images, so it works strai
 | Setting | What it does |
 |---|---|
 | Name | Used as the image description |
-| Built-in images | Which built-in set (1 to 5) to use for any image left empty |
-| Piece as worn / Flat product shot | Upload to replace the built-in images for this piece |
+| Built-in images | Which built-in piece (1 to 5) to show when no image is uploaded |
+| Piece as worn | Upload to replace the built-in image for this piece |
 
 ## Things to check in the theme
 
@@ -65,7 +64,6 @@ All images share one canvas (800 × 1165 px), so they line up:
 
 - **Model without a piece** (one image for the whole section): head, arms, plain vest and jeans, transparent background.
 - **Piece as worn** (per piece): only the piece, cut out exactly as he wears it in a photo of the same pose, transparent background.
-- **Flat product shot** (per piece): the product on a transparent background, placed roughly where he wears it.
 
 A "piece as worn" image laid over the model image must look like him wearing that piece. Keep the vest on the model image smaller than every piece, or it will show around a piece's edges.
 

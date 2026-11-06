@@ -6,12 +6,11 @@
 
   Needs these files in the theme's assets folder:
     two-hiigh-tryon.css, two-hiigh-tryon.js
-    tryon-body.webp, tryon-worn1..5.webp, tryon-flat1..5.webp  (built-in images)
+    tryon-body.webp, tryon-worn1..5.webp  (built-in images)
 
   All images share one canvas (800 x 1165):
     model = the model without any piece: head, arms, plain vest, jeans (section setting)
-    worn  = only the piece, cut out exactly as he wears it (per piece block)
-    flat  = the flat product shot (per piece block)
+    worn  = only the piece, cut out exactly as he wears it, front only (per piece block)
   A "worn" image laid over the model image must look like him wearing that piece.
 {%- endcomment -%}
 
@@ -94,30 +93,11 @@
     <div class="jc__carousel">
       {%- for block in section.blocks -%}
         <div class="jc__item" {{ block.shopify_attributes }}>
-          {%- if block.settings.flat_image != blank -%}
-            <img
-              class="jc__flat"
-              src="{{ block.settings.flat_image | image_url: width: 1000 }}"
-              alt="{{ block.settings.title | escape }}"
-              width="{{ block.settings.flat_image.width }}"
-              height="{{ block.settings.flat_image.height }}"
-              decoding="async"
-            >
-          {%- else -%}
-            <img
-              class="jc__flat"
-              src="{{ 'tryon-flat' | append: block.settings.builtin | append: '.webp' | asset_url }}"
-              alt="{{ block.settings.title | escape }}"
-              width="800"
-              height="1165"
-              decoding="async"
-            >
-          {%- endif -%}
           {%- if block.settings.worn_image != blank -%}
             <img
               class="jc__worn"
               src="{{ block.settings.worn_image | image_url: width: 1000 }}"
-              alt=""
+              alt="{{ block.settings.title | escape }}"
               width="{{ block.settings.worn_image.width }}"
               height="{{ block.settings.worn_image.height }}"
               decoding="async"
@@ -126,7 +106,7 @@
             <img
               class="jc__worn"
               src="{{ 'tryon-worn' | append: block.settings.builtin | append: '.webp' | asset_url }}"
-              alt=""
+              alt="{{ block.settings.title | escape }}"
               width="800"
               height="1165"
               decoding="async"
@@ -301,7 +281,7 @@
           "type": "select",
           "id": "builtin",
           "label": "Built-in images",
-          "info": "Used for any image below that is left empty.",
+          "info": "Used when no image is uploaded below.",
           "options": [
             { "value": "1", "label": "1: Black butterfly tee" },
             { "value": "2", "label": "2: Out of the loop tee" },
@@ -316,12 +296,6 @@
           "id": "worn_image",
           "label": "Piece as worn",
           "info": "Only the piece, cut out exactly as he wears it, transparent background. Same canvas as the model image."
-        },
-        {
-          "type": "image_picker",
-          "id": "flat_image",
-          "label": "Flat product shot",
-          "info": "Transparent background, same canvas as the model image."
         }
       ]
     }
