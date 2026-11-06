@@ -8,14 +8,18 @@
   var SMOOTHING = 0.09;     // higher = snappier, lower = softer
   var WHEEL_LOCK_MS = 650;  // one jacket per wheel/trackpad gesture
   var GESTURE_GAP_MS = 180; // wheel events closer together than this count as one gesture
-  var WORN_FADE = 0.14;     // last part of the slide, where the flat piece turns into the worn photo
+  var REST_ZONE = 0.05;     // scroll slack around each piece before it starts to move
+  var WORN_FROM = 0.75;     // closer to him than this, the piece morphs to its worn shape...
+  var WORN_BLEND = 0.35;    // ...over this much of the slide
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function pad(n) { return String(n).padStart(2, "0"); }
 
   function init(section) {
     var items = [].slice.call(section.querySelectorAll(".jc__item"));
-    var looks = [].slice.call(section.querySelectorAll(".jc__look"));
+    var bodies = [].slice.call(section.querySelectorAll(".jc__body"));
+    var wornImgs = items.map(function (item) { return item.querySelector(".jc__worn"); });
+    var flatImgs = items.map(function (item) { return item.querySelector(".jc__flat"); });
     var label = section.querySelector(".jc__label");
     var num = section.querySelector(".jc__current");
     var N = items.length;
@@ -43,64 +47,47 @@
       return r.top <= 1 && r.bottom >= window.innerHeight - 1;
     }
 
-    var direction = 1;       // 1 = scrolling to the next piece, -1 = back to the previous one
-    var lastPosition = null;
-
     function render(position) {
-      if (lastPosition !== null && Math.abs(position - lastPosition) > 0.0005) {
-        direction = position > lastPosition ? 1 : -1;
-      }
-      lastPosition = position;
-
       var active = clamp(Math.round(position), 0, N - 1);
       label.textContent = "Piece " + pad(active + 1);
       num.textContent = pad(active + 1);
-
-      // Between two pieces: he keeps wearing the one we're leaving while the flat
-      // garment we're heading to slides in and lands on him; only then does the
-      // photo of him wearing it take over.
-      var lo = Math.floor(position), hi = Math.ceil(position);
-      var moving = hi !== lo;
-      var incoming = moving ? (direction > 0 ? hi : lo) : -1;
-      var worn = moving ? (direction > 0 ? lo : hi) : active;
-      var t = moving ? 1 - Math.abs(incoming - position) : 0;   // 0 = at the side, 1 = landed
 
       // Distance between pieces; on narrow screens keep the side ones peeking in
       var spacing = Math.min(window.innerHeight * 0.5, 380, window.innerWidth * 0.62);
 
       items.forEach(function (item, index) {
         var diff = index - position;
-        var x, scale, opacity, z;
+        var d = Math.abs(diff);
+        // how far the piece is from sitting on him: 0 while worn, 1 at the side slot
+        var away = d <= 1 ? clamp((d - REST_ZONE) / (1 - REST_ZONE), 0, 1) : d;
+        var x, scale, opacity;
 
-        if (Math.abs(diff) > 2.2) {
+        if (d > 2.2) {
           opacity = 0;
           x = diff > 0 ? 900 : -900;
           scale = 0.5;
-          z = 1;
         } else {
-          var d = Math.min(Math.abs(diff), 2);
-          x = diff * spacing;
-          scale = 1 - d * 0.18;
-          z = 30 - Math.round(Math.abs(diff) * 10);
-          if (index === incoming) {
-            // fully visible on its way in; hands over to the worn photo as it lands
-            opacity = Math.min(1, 0.45 + t * 1.6) * clamp((1 - t) / WORN_FADE, 0, 1);
-            z = 40;
-          } else {
-            // waiting at the side; hidden while it's the piece he is wearing
-            opacity = Math.max(1 - d * 0.55, 0) * clamp((d - 0.5) / 0.5, 0, 1);
-          }
+          x = (diff < 0 ? -1 : 1) * away * spacing;
+          scale = 1 - Math.min(away, 2) * 0.18;
+          // solid while on or near him, lighter while waiting at the side
+          opacity = Math.max(1 - 0.55 * clamp((away - 0.25) / 0.75, 0, 1) - 0.55 * Math.max(away - 1, 0), 0);
         }
 
         item.style.transform = "translate(calc(-50% + " + x + "px),-50%) scale(" + scale + ")";
         item.style.opacity = opacity;
-        item.style.zIndex = z;
+        item.style.zIndex = 30 - Math.round(Math.min(d, 2) * 10);
+
+        // Near him the piece is in its worn shape (cut from his photo), so it lands
+        // pixel-for-pixel on his body; out at the side it is the flat product shot.
+        var worn = clamp((WORN_FROM - away) / WORN_BLEND, 0, 1);
+        wornImgs[index].style.opacity = worn;
+        flatImgs[index].style.opacity = 1 - worn;
       });
 
-      looks.forEach(function (look, index) {
-        var isIncoming = index === incoming;
-        look.style.opacity = index === worn ? 1 : isIncoming ? clamp((t - (1 - WORN_FADE)) / WORN_FADE, 0, 1) : 0;
-        look.style.zIndex = isIncoming ? 2 : 1;
+      // His body under the pieces: the current one stays solid, the next fades in over it
+      var base = clamp(Math.floor(position), 0, N - 1);
+      bodies.forEach(function (body, index) {
+        body.style.opacity = index === base ? 1 : index === base + 1 ? clamp(position - base, 0, 1) : 0;
       });
     }
 

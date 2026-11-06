@@ -13,7 +13,7 @@ jacket-carousel/
   jacket-carousel.css
   jacket-carousel.js
   section.html             ← HTML to paste into your page
-  assets/  look1–5.webp (model wearing each piece), flat1–5.webp (flat product shots)
+  assets/  body1–5.webp (his body under each piece), worn1–5.webp (each piece as worn), flat1–5.webp (flat product shots)
 index.html                 ← demo page with the carousel and the site nav
 ```
 
