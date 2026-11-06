@@ -10,6 +10,7 @@
   var GESTURE_GAP_MS = 180; // wheel events closer together than this count as one gesture
   var SNAP_DELAY_MS = 140;  // scrolling counts as stopped after this long without movement
   var SNAP_COMMIT = 0.15;   // past this share of the way, snapping finishes the move instead of going back
+  var FRONT_FADE = 0.12;    // last part of a slide, where his hands come in front of the piece
   var REST_ZONE = 0.05;     // scroll slack around each piece before it starts to move
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
@@ -21,6 +22,7 @@
     var labelPrefix = section.getAttribute("data-jc-label") || "Piece";
     var items = [].slice.call(section.querySelectorAll(".jc__item"));
     var bodies = [].slice.call(section.querySelectorAll(".jc__body"));
+    var front = section.querySelector(".jc__front");
     var label = section.querySelector(".jc__label");
     var num = section.querySelector(".jc__current");
     var N = items.length;
@@ -58,11 +60,14 @@
       // Distance between pieces; on narrow screens keep the side ones peeking in
       var spacing = Math.min(window.innerHeight * 0.5, 380, window.innerWidth * 0.62);
 
+      var nearest = 1;          // how far the closest piece is from sitting on him
+
       items.forEach(function (item, index) {
         var diff = index - position;
         var d = Math.abs(diff);
         // how far the piece is from sitting on him: 0 while worn, 1 at the side slot
         var away = d <= 1 ? clamp((d - REST_ZONE) / (1 - REST_ZONE), 0, 1) : d;
+        if (away < nearest) nearest = away;
         var x, scale, opacity;
 
         if (d > 2.2) {
@@ -84,6 +89,10 @@
         // his body. --jc-away (0 on him, 1 at the side) drives the side shadow in CSS.
         item.style.setProperty("--jc-away", Math.min(away, 1).toFixed(3));
       });
+
+      // His forearms and hands go in front of a piece only once it has landed on him.
+      // While a piece is sliding it stays on top, so no arm floats over it.
+      if (front) front.style.opacity = clamp(1 - nearest / FRONT_FADE, 0, 1);
 
       // His body under the pieces. Normally there is one body image and it never
       // changes. If a body image is given per piece, the current one stays solid
