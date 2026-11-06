@@ -13,7 +13,7 @@ jacket-carousel/
   jacket-carousel.css
   jacket-carousel.js
   section.html             ← HTML to paste into your page
-  assets/  body1–5.webp (his body under each piece), worn1–5.webp (each piece as worn), flat1–5.webp (flat product shots)
+  assets/  body.webp (the model without a piece), worn1–5.webp (each piece as worn), flat1–5.webp (flat product shots)
 index.html                 ← demo page with the carousel and the site nav
 ```
 
@@ -57,13 +57,13 @@ If the folder ends up somewhere else (for example `/assets/`), change these path
 
 ## Changing the pieces
 
-Each piece needs three images, all on the same 800 × 1165 canvas so they line up:
+All images share one 800 × 1165 canvas so they line up:
 
-- `bodyN.webp`: the model without the piece (head, arms, plain vest, jeans), transparent background
-- `wornN.webp`: only the piece, cut out exactly as he wears it in the photo
-- `flatN.webp`: the flat product shot, placed roughly where he wears it
+- `body.webp`: the model without a piece (head, arms, plain vest, jeans), transparent background. One image, used for every piece.
+- `wornN.webp`: only piece N, cut out exactly as he wears it in the photo
+- `flatN.webp`: the flat product shot of piece N, placed roughly where he wears it
 
-`bodyN` with `wornN` on top must reproduce the original photo of him in piece N. That is what makes a piece land on him with no visible change. To add or remove a piece, add or remove its `<img class="jc__body">` and its `<div class="jc__item">` in the HTML, update the `05` in `.jc__counter-total`, and adjust `--jc-length` (about 100vh per piece, plus 100vh).
+`wornN` laid over `body.webp` must look like him wearing piece N. Because the body never changes, his arms and hands stay the same while pieces slide on and off. To add or remove a piece, add or remove its `<div class="jc__item">` in the HTML, update the `05` in `.jc__counter-total`, and adjust `--jc-length` (about 100vh per piece, plus 100vh).
 
 ## Common problems
 

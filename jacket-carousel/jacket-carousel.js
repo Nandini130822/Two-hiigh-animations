@@ -91,11 +91,15 @@
         flatImgs[index].style.opacity = 1 - worn;
       });
 
-      // His body under the pieces: the current one stays solid, the next fades in over it
-      var base = clamp(Math.floor(position), 0, N - 1);
-      bodies.forEach(function (body, index) {
-        body.style.opacity = index === base ? 1 : index === base + 1 ? clamp(position - base, 0, 1) : 0;
-      });
+      // His body under the pieces. Normally there is one body image and it never
+      // changes. If a body image is given per piece, the current one stays solid
+      // and the next fades in over it.
+      if (bodies.length > 1) {
+        var base = clamp(Math.floor(position), 0, N - 1);
+        bodies.forEach(function (body, index) {
+          body.style.opacity = index === base ? 1 : index === base + 1 ? clamp(position - base, 0, 1) : 0;
+        });
+      }
     }
 
     function animate() {

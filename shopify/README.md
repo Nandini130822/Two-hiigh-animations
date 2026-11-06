@@ -10,7 +10,7 @@ sections/
 assets/
   two-hiigh-tryon.css           styles
   two-hiigh-tryon.js            scroll logic
-  tryon-body1..5.webp           built-in images: model without each piece
+  tryon-body.webp               built-in image: the model without a piece
   tryon-worn1..5.webp           built-in images: each piece as worn
   tryon-flat1..5.webp           built-in images: flat product shots
 ```
@@ -18,7 +18,7 @@ assets/
 ## Install
 
 1. Copy `sections/two-hiigh-tryon.liquid` into the theme's `sections/` folder.
-2. Copy everything in `assets/` into the theme's `assets/` folder (17 files). The file names must stay as they are.
+2. Copy everything in `assets/` into the theme's `assets/` folder (13 files). The file names must stay as they are.
 3. In the theme editor, open the template that should show it, choose **Add section → TWO HIIGH try-on**, and save.
 
 With Shopify CLI, from the theme folder:
@@ -40,6 +40,7 @@ The section adds itself with its 5 pieces and built-in images, so it works strai
 | Counter label | The word in front of the number, bottom left ("Piece 01") |
 | Sticky header height (desktop / mobile) | Space left at the top for a sticky header. Set both to 0 if the header is not sticky |
 | Scroll distance per piece | How much scrolling each piece takes. Higher feels slower |
+| Model without a piece | Optional upload that replaces the built-in model image |
 | Font | "Same as the theme" (default) or "Boogaloo (Google Fonts)" |
 | Background, Text | Colours |
 
@@ -49,7 +50,7 @@ The section adds itself with its 5 pieces and built-in images, so it works strai
 |---|---|
 | Name | Used as the image description |
 | Built-in images | Which built-in set (1 to 5) to use for any image left empty |
-| Model without this piece / Piece as worn / Flat product shot | Upload to replace the built-in images for this piece |
+| Piece as worn / Flat product shot | Upload to replace the built-in images for this piece |
 
 ## Things to check in the theme
 
@@ -60,13 +61,13 @@ The section adds itself with its 5 pieces and built-in images, so it works strai
 
 ## Adding or replacing a piece
 
-Each piece needs three images on the same canvas (800 × 1165 px):
+All images share one canvas (800 × 1165 px), so they line up:
 
-- **Model without this piece:** head, arms, plain vest and jeans, transparent background.
-- **Piece as worn:** only the piece, cut out exactly as he wears it in the photo, transparent background.
-- **Flat product shot:** the product on a transparent background, placed roughly where he wears it.
+- **Model without a piece** (one image for the whole section): head, arms, plain vest and jeans, transparent background.
+- **Piece as worn** (per piece): only the piece, cut out exactly as he wears it in a photo of the same pose, transparent background.
+- **Flat product shot** (per piece): the product on a transparent background, placed roughly where he wears it.
 
-The first two together must reproduce the original photo of the model wearing the piece. That is what makes the piece land on him with no visible change. Images that do not line up will show a jump when the piece lands.
+A "piece as worn" image laid over the model image must look like him wearing that piece. Keep the vest on the model image smaller than every piece, or it will show around a piece's edges.
 
 ## How it was checked
 

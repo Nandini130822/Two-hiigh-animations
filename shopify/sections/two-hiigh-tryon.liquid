@@ -6,13 +6,13 @@
 
   Needs these files in the theme's assets folder:
     two-hiigh-tryon.css, two-hiigh-tryon.js
-    tryon-body1..5.webp, tryon-worn1..5.webp, tryon-flat1..5.webp  (built-in images)
+    tryon-body.webp, tryon-worn1..5.webp, tryon-flat1..5.webp  (built-in images)
 
-  Each "Piece" block uses three images on the same canvas (800 x 1165):
-    body  = the model without the piece (transparent background)
-    worn  = only the piece, cut out exactly as he wears it
-    flat  = the flat product shot
-  "body" with "worn" on top must reproduce the photo of him wearing the piece.
+  All images share one canvas (800 x 1165):
+    model = the model without any piece: head, arms, plain vest, jeans (section setting)
+    worn  = only the piece, cut out exactly as he wears it (per piece block)
+    flat  = the flat product shot (per piece block)
+  A "worn" image laid over the model image must look like him wearing that piece.
 {%- endcomment -%}
 
 {{ 'two-hiigh-tryon.css' | asset_url | stylesheet_tag }}
@@ -70,27 +70,25 @@
     </div>
 
     <div class="jc__model" role="img" aria-label="{{ section.settings.model_alt | escape }}">
-      {%- for block in section.blocks -%}
-        {%- if block.settings.body_image != blank -%}
-          <img
-            class="jc__body"
-            src="{{ block.settings.body_image | image_url: width: 1000 }}"
-            alt=""
-            width="{{ block.settings.body_image.width }}"
-            height="{{ block.settings.body_image.height }}"
-            decoding="async"
-          >
-        {%- else -%}
-          <img
-            class="jc__body"
-            src="{{ 'tryon-body' | append: block.settings.builtin | append: '.webp' | asset_url }}"
-            alt=""
-            width="800"
-            height="1165"
-            decoding="async"
-          >
-        {%- endif -%}
-      {%- endfor -%}
+      {%- if section.settings.body_image != blank -%}
+        <img
+          class="jc__body"
+          src="{{ section.settings.body_image | image_url: width: 1000 }}"
+          alt=""
+          width="{{ section.settings.body_image.width }}"
+          height="{{ section.settings.body_image.height }}"
+          decoding="async"
+        >
+      {%- else -%}
+        <img
+          class="jc__body"
+          src="{{ 'tryon-body.webp' | asset_url }}"
+          alt=""
+          width="800"
+          height="1165"
+          decoding="async"
+        >
+      {%- endif -%}
     </div>
 
     <div class="jc__carousel">
@@ -215,6 +213,16 @@
     },
     {
       "type": "header",
+      "content": "Model"
+    },
+    {
+      "type": "image_picker",
+      "id": "body_image",
+      "label": "Model without a piece",
+      "info": "Optional. Replaces the built-in model. Transparent background, 800 x 1165 px: head, arms, plain vest and jeans."
+    },
+    {
+      "type": "header",
       "content": "Layout"
     },
     {
@@ -305,15 +313,9 @@
         },
         {
           "type": "image_picker",
-          "id": "body_image",
-          "label": "Model without this piece",
-          "info": "Transparent background, 800 x 1165 px. Head, arms, vest and jeans only."
-        },
-        {
-          "type": "image_picker",
           "id": "worn_image",
           "label": "Piece as worn",
-          "info": "Only the piece, cut out exactly as he wears it. Same canvas as the model image."
+          "info": "Only the piece, cut out exactly as he wears it, transparent background. Same canvas as the model image."
         },
         {
           "type": "image_picker",

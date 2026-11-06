@@ -77,8 +77,8 @@
   color: #666;
 }
 
-/* Model: his body under each piece (head, arms, a plain vest, jeans). JS cross-fades
-   between the five bodies; body N plus worn piece N is exactly his photo in piece N. */
+/* Model: his body under the pieces (head, arms, a plain vest, jeans). One image,
+   shared by every piece, so his arms and hands never change while pieces slide. */
 .jc__model {
   position: absolute;
   left: 50%;
