@@ -82,10 +82,10 @@
 .jc__model {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: calc(50% + var(--jc-top) / 2 - 12px);
   transform: translate(-50%, -50%);
   width: min(45vh, 560px);
-  height: 88vh;
+  height: calc(100vh - var(--jc-top) - 88px);
   z-index: 5;
   pointer-events: none;
 }
@@ -116,10 +116,10 @@
 
 .jc__item {
   position: absolute;
-  top: 50%;
+  top: calc(50% + var(--jc-top) / 2 - 12px);
   left: 50%;
   width: min(45vh, 560px);
-  height: 88vh;
+  height: calc(100vh - var(--jc-top) - 88px);
   transform: translate(-50%, -50%);
   will-change: transform, opacity;
 }
@@ -177,7 +177,7 @@
   .jc__copy { max-width: 200px; }
   .jc__title { font-size: 26px; }
   .jc__text { font-size: 10px; }
-  .jc__model, .jc__item { width: min(55vh, 400px); height: 82vh; }
+  .jc__model, .jc__item { width: min(55vh, 400px); height: calc(100vh - var(--jc-top) - 80px); }
   .jc__label { bottom: 20px; font-size: 9px; }
   .jc__counter { bottom: 20px; font-size: 10px; }
   .jc__counter-line { width: 40px; }
