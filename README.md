@@ -1,8 +1,8 @@
-# TWO HIIGH: scroll animations
+# TWO HIIGH: scroll try-on carousel
 
 A scroll animation in plain HTML, CSS and JS with **no libraries and no Shopify**, so it works on any website. All text uses the site font, **Boogaloo**.
 
-**Jacket Collection carousel** (`jacket-carousel/`): the model stands in the middle and each scroll step changes what he's wearing to the next piece, while the flat product shots wait at the sides (01 → 05: three tees and two tanks). The section stays pinned on screen for about 5 screen-heights of scrolling, then the page scrolls on normally.
+**Try-on carousel** (`jacket-carousel/`): the model stands in the middle. On each scroll, the piece he's wearing slides off his body and the next one slides on (01 → 05: three tees and two sleeveless tees). Pieces waiting at the sides show as flat product shots. One swipe moves exactly one piece, and if scrolling stops in between, it finishes the move by itself. The section stays pinned on screen for about 5 screen-heights of scrolling, then the page scrolls on normally.
 
 > The jacket-zip animation ("TWO HIIGH" behind the opening jacket, with the hero video) is removed for now. It's saved in git history at commit `65a570b`, so it can be added back exactly as it was.
 
@@ -51,7 +51,19 @@ If the folder ends up somewhere else (for example `/assets/`), change these path
 | Header height it leaves room for | `--jc-top: 64px;` in `jacket-carousel.css` (set to `0` if your site has no fixed header) |
 | Font | `font-family` on `.jc` in `jacket-carousel.css` |
 | Smoothness | `SMOOTHING` at the top of `jacket-carousel.js` (lower = floatier) |
-| Time between jacket steps | `WHEEL_LOCK_MS` at the top of `jacket-carousel.js` |
+| Time between steps | `WHEEL_LOCK_MS` at the top of `jacket-carousel.js` |
+| How soon a stopped scroll snaps to a piece | `SNAP_DELAY_MS` at the top of `jacket-carousel.js` |
+| Heading and tagline text | `.jc__eyebrow` and `.jc__copy` in the pasted HTML |
+
+## Changing the pieces
+
+Each piece needs three images, all on the same 800 × 1165 canvas so they line up:
+
+- `bodyN.webp`: the model without the piece (head, arms, plain vest, jeans), transparent background
+- `wornN.webp`: only the piece, cut out exactly as he wears it in the photo
+- `flatN.webp`: the flat product shot, placed roughly where he wears it
+
+`bodyN` with `wornN` on top must reproduce the original photo of him in piece N. That is what makes a piece land on him with no visible change. To add or remove a piece, add or remove its `<img class="jc__body">` and its `<div class="jc__item">` in the HTML, update the `05` in `.jc__counter-total`, and adjust `--jc-length` (about 100vh per piece, plus 100vh).
 
 ## Common problems
 
