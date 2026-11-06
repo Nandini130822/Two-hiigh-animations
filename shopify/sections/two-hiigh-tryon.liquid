@@ -6,7 +6,7 @@
 
   Needs these files in the theme's assets folder:
     two-hiigh-tryon.css, two-hiigh-tryon.js
-    tryon-body.webp, tryon-front.webp, tryon-worn1..5.webp  (built-in images)
+    tryon-body.webp, tryon-worn1..5.webp  (built-in images)
 
   All images share one canvas (800 x 1165):
     model = the model without any piece: head, arms, plain vest, jeans (section setting)
@@ -116,29 +116,6 @@
       {%- endfor -%}
     </div>
 
-    {%- comment -%} His forearms and hands again, drawn over the pieces {%- endcomment -%}
-    {%- if section.settings.front_image != blank -%}
-      <div class="jc__front">
-        <img
-          src="{{ section.settings.front_image | image_url: width: 1000 }}"
-          alt=""
-          width="{{ section.settings.front_image.width }}"
-          height="{{ section.settings.front_image.height }}"
-          decoding="async"
-        >
-      </div>
-    {%- elsif section.settings.body_image == blank -%}
-      <div class="jc__front">
-        <img
-          src="{{ 'tryon-front.webp' | asset_url }}"
-          alt=""
-          width="800"
-          height="1165"
-          decoding="async"
-        >
-      </div>
-    {%- endif -%}
-
     <div class="jc__label">{{ piece_label | escape }} 01</div>
 
     <div class="jc__counter">
@@ -223,12 +200,6 @@
       "id": "body_image",
       "label": "Model without a piece",
       "info": "Optional. Replaces the built-in model. Transparent background, 800 x 1165 px: head, arms, plain vest and jeans."
-    },
-    {
-      "type": "image_picker",
-      "id": "front_image",
-      "label": "Model's forearms and hands (front layer)",
-      "info": "Optional, used with a replacement model. Only his forearms and hands, cut from the same model image, same canvas. Drawn over the pieces."
     },
     {
       "type": "header",

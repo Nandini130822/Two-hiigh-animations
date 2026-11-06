@@ -13,7 +13,7 @@ jacket-carousel/
   jacket-carousel.css
   jacket-carousel.js
   section.html             ← HTML to paste into your page
-  assets/  body.webp (the model without a piece), front.webp (his forearms and hands, drawn over the pieces), worn1–5.webp (each piece as worn, front only)
+  assets/  body.webp (the model without a piece), worn1–5.webp (each piece as worn, front only)
 index.html                 ← demo page with the carousel and the site nav
 ```
 
@@ -62,8 +62,7 @@ When you later replace these files with a newer version, replace the HTML, CSS a
 All images share one 800 × 1165 canvas so they line up:
 
 - `body.webp`: the model without a piece (head, arms, plain vest, jeans), transparent background. One image, used for every piece.
-- `front.webp`: only his forearms and hands, cut from `body.webp`. It is drawn over the pieces, so a piece can be a whole shape and still sit behind his hands.
-- `wornN.webp`: only piece N, cut out exactly as he wears it in the photo, completed where his hands were in front
+- `wornN.webp`: only piece N, cut out exactly as he wears it in the photo
 
 `wornN` laid over `body.webp` must look like him wearing piece N. Because the body never changes, his arms and hands stay the same while pieces slide on and off. To add or remove a piece, add or remove its `<div class="jc__item">` in the HTML, update the `05` in `.jc__counter-total`, and adjust `--jc-length` (about 100vh per piece, plus 100vh).
 
