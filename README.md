@@ -2,7 +2,7 @@
 
 A scroll animation in plain HTML, CSS and JS with **no libraries and no Shopify**, so it works on any website. All text uses the site font, **Boogaloo**.
 
-**Jacket Collection carousel** (`jacket-carousel/`): the model sits in the middle and each scroll step swaps to the next piece (01 → 05: three tees and two tanks). The section stays pinned on screen for about 5 screen-heights of scrolling, then the page scrolls on normally.
+**Jacket Collection carousel** (`jacket-carousel/`): the model stands in the middle and each scroll step changes what he's wearing to the next piece, while the flat product shots wait at the sides (01 → 05: three tees and two tanks). The section stays pinned on screen for about 5 screen-heights of scrolling, then the page scrolls on normally.
 
 > The jacket-zip animation ("TWO HIIGH" behind the opening jacket, with the hero video) is removed for now. It's saved in git history at commit `65a570b`, so it can be added back exactly as it was.
 
@@ -13,7 +13,7 @@ jacket-carousel/
   jacket-carousel.css
   jacket-carousel.js
   section.html             ← HTML to paste into your page
-  assets/  model-vest.webp, tee1–5.webp (worn layer), tee1–5-back.webp (back collar + label)
+  assets/  look1–5.webp (model wearing each piece), flat1–5.webp (flat product shots)
 index.html                 ← demo page with the carousel and the site nav
 ```
 

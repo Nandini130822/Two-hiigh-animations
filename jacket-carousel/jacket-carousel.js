@@ -14,7 +14,7 @@
 
   function init(section) {
     var items = [].slice.call(section.querySelectorAll(".jc__item"));
-    var backs = items.map(function (item) { return item.querySelector(".jc__back"); });
+    var looks = [].slice.call(section.querySelectorAll(".jc__look"));
     var label = section.querySelector(".jc__label");
     var num = section.querySelector(".jc__current");
     var N = items.length;
@@ -63,15 +63,21 @@
           var d = Math.min(Math.abs(diff), 2);
           x = diff * spacing;
           scale = 1 - d * 0.18;
-          opacity = 1 - d * 0.55;
+          // fades out as it reaches the centre, where the photo of him wearing it takes over
+          opacity = Math.max(1 - d * 0.55, 0) * Math.min(d / 0.6, 1);
           z = 30 - Math.round(Math.abs(diff) * 10);
         }
 
         item.style.transform = "translate(calc(-50% + " + x + "px),-50%) scale(" + scale + ")";
         item.style.opacity = opacity;
         item.style.zIndex = z;
-        // Worn look on the model; the full garment (back collar + label) fades in as it moves off
-        if (backs[index]) backs[index].style.opacity = Math.min(Math.abs(diff) / 0.12, 1);
+      });
+
+      // Photos of him wearing each piece: the current one stays solid and the
+      // next one fades in on top of it, so he never looks see-through mid-scroll
+      var base = clamp(Math.floor(position), 0, N - 1);
+      looks.forEach(function (look, index) {
+        look.style.opacity = index === base ? 1 : index === base + 1 ? clamp(position - base, 0, 1) : 0;
       });
     }
 

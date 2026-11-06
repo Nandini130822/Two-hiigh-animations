@@ -64,7 +64,7 @@
   color: #666;
 }
 
-/* Model */
+/* Model: one photo of him wearing each piece, stacked; JS cross-fades between them */
 .jc__model {
   position: absolute;
   left: 50%;
@@ -74,19 +74,23 @@
   height: 88vh;
   z-index: 5;
   pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.jc__model img {
+.jc__look {
+  position: absolute;
+  inset: 0;
+  margin: auto;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   display: block;
+  opacity: 0;
+  will-change: opacity;
 }
 
-/* Carousel */
+.jc__look:first-child { opacity: 1; }
+
+/* Carousel: the flat product shots waiting at the sides */
 .jc__carousel {
   position: absolute;
   inset: 0;
@@ -94,14 +98,14 @@
   pointer-events: none;
 }
 
-/* Same centre and width as the model box; 834/812 taller so the garment and
-   model images always render at exactly the same scale. */
+/* Same box as the model, and the flat images share the look photos' canvas,
+   so each piece slides in over the spot where he wears it. */
 .jc__item {
   position: absolute;
   top: 50%;
   left: 50%;
   width: min(45vh, 560px);
-  height: 90.4vh;
+  height: 88vh;
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
@@ -109,29 +113,12 @@
   will-change: transform, opacity;
 }
 
-/* Garment images are 656x834: 50px wider on each side than the model image,
-   so wide sleeves fit. 118% keeps them at the model's scale. */
 .jc__item img {
-  flex: none;
-  max-width: 118%;
+  max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   display: block;
   filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .15));
-  /* offset of the garment canvas from the model image, in garment-image % */
-  transform: translate(3.05%, 3.12%);
-}
-
-/* The parts hidden while the piece is on the model: inside back collar + label
-   (so his neck comes through) and the fabric behind his forearms and hands
-   (so they sit in front). Shown when the piece is off to the side. */
-.jc__item .jc__back {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  filter: none;
-  opacity: 0;
 }
 
 .jc__label {
@@ -174,7 +161,6 @@
   .jc__copy h1 { font-size: 26px; }
   .jc__copy p { font-size: 10px; }
   .jc__model, .jc__item { width: min(55vh, 400px); height: 82vh; }
-  .jc__item { height: 84.2vh; }
   .jc__label { bottom: 20px; font-size: 9px; }
   .jc__counter { bottom: 20px; font-size: 10px; }
   .jc__counter-line { width: 40px; }
@@ -192,5 +178,4 @@
   .jc__copy h1 br { display: none; }
   .jc__copy p { font-size: 12px; margin-top: 8px; }
   .jc__model, .jc__item { width: min(86vw, 46vh); height: 64vh; top: 60%; }
-  .jc__item { height: 65.7vh; }
 }
