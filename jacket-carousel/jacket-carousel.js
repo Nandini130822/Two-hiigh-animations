@@ -8,6 +8,8 @@
   var SMOOTHING = 0.09;     // higher = snappier, lower = softer
   var WHEEL_LOCK_MS = 650;  // one jacket per wheel/trackpad gesture
   var GESTURE_GAP_MS = 180; // wheel events closer together than this count as one gesture
+  var SNAP_DELAY_MS = 140;  // scrolling counts as stopped after this long without movement
+  var SNAP_COMMIT = 0.15;   // past this share of the way, snapping finishes the move instead of going back
   var REST_ZONE = 0.05;     // scroll slack around each piece before it starts to move
   var WORN_FROM = 0.75;     // closer to him than this, the piece morphs to its worn shape...
   var WORN_BLEND = 0.35;    // ...over this much of the slide
@@ -131,16 +133,49 @@
       event.preventDefault();
       wheelLocked = true;
       goToJacket(next);
-      setTimeout(function () { wheelLocked = false; }, WHEEL_LOCK_MS);
+      setTimeout(function () { wheelLocked = false; scheduleSnap(); }, WHEEL_LOCK_MS);
     }, { passive: false });
+
+    // When scrolling stops between two pieces (touch, scrollbar, a small trackpad
+    // nudge), finish the move so a piece always ends up fully on him.
+    var snapTimer = null;
+    var touching = false;
+    var lastScrollPosition = null;
+    var scrollDirection = 1;
+
+    function snapToPiece() {
+      snapTimer = null;
+      if (touching || wheelLocked || !isPinned()) return;
+      var position = positionFromScroll();
+      if (Math.abs(position - Math.round(position)) < 0.01) return;      // already on a piece
+      var lo = Math.floor(position), part = position - lo;
+      // carry on in the direction of travel once the move is clearly under way
+      var index = scrollDirection > 0 ? (part > SNAP_COMMIT ? lo + 1 : lo)
+                                      : (part < 1 - SNAP_COMMIT ? lo : lo + 1);
+      goToJacket(index);
+    }
+
+    function scheduleSnap() {
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(snapToPiece, SNAP_DELAY_MS);
+    }
 
     window.addEventListener("scroll", function () {
       if (wheelLocked) return;
       var position = positionFromScroll();
+      if (lastScrollPosition !== null && Math.abs(position - lastScrollPosition) > 0.0005) {
+        scrollDirection = position > lastScrollPosition ? 1 : -1;
+      }
+      lastScrollPosition = position;
       currentPosition = targetPosition = position;
       currentIndex = Math.round(position);
       render(position);
+      scheduleSnap();
     }, { passive: true });
+
+    window.addEventListener("touchstart", function () { touching = true; clearTimeout(snapTimer); }, { passive: true });
+    window.addEventListener("touchend", function () { touching = false; scheduleSnap(); }, { passive: true });
+    window.addEventListener("touchcancel", function () { touching = false; scheduleSnap(); }, { passive: true });
 
     window.addEventListener("resize", function () {
       currentPosition = targetPosition = positionFromScroll();
