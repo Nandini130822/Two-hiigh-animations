@@ -32,6 +32,7 @@
     var wheelLocked = false;
     var lastWheelTime = 0;
     var gestureStartedPinned = false;
+    var gestureMoved = false;      // this wheel/trackpad gesture has already changed the piece
 
     // How far the page can scroll while this section is pinned
     function scrollLength() { return Math.max(1, section.offsetHeight - window.innerHeight); }
@@ -115,8 +116,12 @@
       lastWheelTime = now;
 
       var pinned = isPinned();
-      if (newGesture) gestureStartedPinned = pinned;
+      if (newGesture) { gestureStartedPinned = pinned; gestureMoved = false; }
       if (!pinned) { gestureStartedPinned = false; return; }
+
+      // One piece per gesture: a long swipe keeps sending events after the move is
+      // done, and those must not nudge the page or carry on to the piece after
+      if (gestureMoved) { event.preventDefault(); return; }
 
       if (Math.abs(event.deltaY) < 8) return;
 
@@ -132,6 +137,7 @@
 
       event.preventDefault();
       wheelLocked = true;
+      gestureMoved = true;
       goToJacket(next);
       setTimeout(function () { wheelLocked = false; scheduleSnap(); }, WHEEL_LOCK_MS);
     }, { passive: false });
@@ -161,12 +167,12 @@
     }
 
     window.addEventListener("scroll", function () {
-      if (wheelLocked) return;
       var position = positionFromScroll();
       if (lastScrollPosition !== null && Math.abs(position - lastScrollPosition) > 0.0005) {
         scrollDirection = position > lastScrollPosition ? 1 : -1;
       }
       lastScrollPosition = position;
+      if (wheelLocked) return;
       currentPosition = targetPosition = position;
       currentIndex = Math.round(position);
       render(position);
