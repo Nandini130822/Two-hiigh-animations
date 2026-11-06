@@ -11,13 +11,14 @@ assets/
   two-hiigh-tryon.css           styles
   two-hiigh-tryon.js            scroll logic
   tryon-body.webp               built-in image: the model without a piece
+  tryon-front.webp              built-in image: his forearms and hands, drawn over the pieces
   tryon-worn1..5.webp           built-in images: each piece as worn
 ```
 
 ## Install
 
 1. Copy `sections/two-hiigh-tryon.liquid` into the theme's `sections/` folder.
-2. Copy everything in `assets/` into the theme's `assets/` folder (8 files). The file names must stay as they are.
+2. Copy everything in `assets/` into the theme's `assets/` folder (9 files). The file names must stay as they are.
 3. In the theme editor, open the template that should show it, choose **Add section → TWO HIIGH try-on**, and save.
 
 With Shopify CLI, from the theme folder:
@@ -40,6 +41,7 @@ The section adds itself with its 5 pieces and built-in images, so it works strai
 | Sticky header height (desktop / mobile) | Space left at the top for a sticky header. Set both to 0 if the header is not sticky |
 | Scroll distance per piece | How much scrolling each piece takes. Higher feels slower |
 | Model without a piece | Optional upload that replaces the built-in model image |
+| Model's forearms and hands | Optional, with a replacement model: the front layer drawn over the pieces. The built-in one is used only with the built-in model |
 | Font | "Same as the theme" (default) or "Boogaloo (Google Fonts)" |
 | Background, Text | Colours |
 
